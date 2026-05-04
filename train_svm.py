@@ -24,17 +24,26 @@ def run_svm_training():
     print("[2] Membagi dataset menjadi 80% Data Latih dan 20% Data Uji...")
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
     
-    # 3. TF-IDF Feature Extraction
-    print("[3] Mengekstrak fitur TF-IDF dari Data Latih...")
-    tfidf_vectorizer = TfidfVectorizer(max_features=10000)
+    from sklearn.pipeline import FeatureUnion
+    from sklearn.linear_model import RidgeClassifier
+    
+    # 3. TF-IDF Feature Extraction (Feature Union: Word + Character N-Grams)
+    print("[3] Mengekstrak fitur TF-IDF (Word & Char N-Grams) dari Data Latih...")
+    word_vectorizer = TfidfVectorizer(ngram_range=(1,3), sublinear_tf=True, min_df=2, analyzer='word')
+    char_vectorizer = TfidfVectorizer(ngram_range=(2,5), sublinear_tf=True, min_df=3, analyzer='char_wb', max_features=50000)
+    
+    tfidf_vectorizer = FeatureUnion([
+        ('word', word_vectorizer),
+        ('char', char_vectorizer)
+    ])
+    
     X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
     X_test_tfidf = tfidf_vectorizer.transform(X_test)
     
-    # 4. Inisialisasi dan Pelatihan Model SVM
-    print("\n[4] Memulai pelatihan Support Vector Machine (LinearSVC)...")
-    print("    Mencari hyperplane (garis pemisah) terbaik antara review Asli dan Palsu...")
-    # LinearSVC dipilih karena sangat cepat dan akurat untuk dataset teks besar (sparse matrix)
-    svm_model = LinearSVC(random_state=42)
+    # 4. Inisialisasi dan Pelatihan Model (RidgeClassifier)
+    print("\n[4] Memulai pelatihan Model Super-Optimized (RidgeClassifier)...")
+    print("    Mencari hyperplane terbaik dengan ~200k+ fitur (Kombinasi Kata & Karakter)...")
+    svm_model = RidgeClassifier(random_state=42)
     svm_model.fit(X_train_tfidf, y_train)
     print("    Pelatihan Selesai!")
     

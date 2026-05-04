@@ -20,7 +20,7 @@ def analyze_and_optimize():
         X, y, test_size=0.2, random_state=42, stratify=y)
 
     # 2. TF-IDF
-    tfidf = TfidfVectorizer(max_features=10000)
+    tfidf = TfidfVectorizer(ngram_range=(1,3), sublinear_tf=True, min_df=2)
     X_train_tfidf = tfidf.fit_transform(X_train)
     X_test_tfidf = tfidf.transform(X_test)
 

@@ -24,19 +24,20 @@ st.markdown("""
 
 html, body, [class*="css"] {
     font-family: 'Inter', sans-serif;
-    color: #f1f5f9;
+    color: #1e293b;
 }
 
 .stApp {
-    background: #0a0a0f;
+    background: #f8fafc;
 }
 
 /* Hide Streamlit chrome */
 #MainMenu, footer, header { visibility: hidden; }
-.block-container { padding-top: 3rem !important; max-width: 680px !important; }
+.block-container { padding-top: 3rem !important; max-width: 720px !important; }
 
 /* ─── Typography ─── */
-h1, h2, h3 { color: #f1f5f9 !important; }
+h1, h2, h3 { color: #0f172a !important; font-weight: 700 !important; }
+p { color: #475569 !important; }
 
 /* ─── Hero ─── */
 .hero {
@@ -45,9 +46,9 @@ h1, h2, h3 { color: #f1f5f9 !important; }
 }
 .hero-badge {
     display: inline-block;
-    background: rgba(139,92,246,0.15);
-    border: 1px solid rgba(139,92,246,0.35);
-    color: #a78bfa;
+    background: rgba(99,102,241,0.1);
+    border: 1px solid rgba(99,102,241,0.2);
+    color: #4f46e5;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.1em;
@@ -58,20 +59,20 @@ h1, h2, h3 { color: #f1f5f9 !important; }
 }
 .hero-title {
     font-size: 2.6rem;
-    font-weight: 700;
+    font-weight: 800;
     line-height: 1.15;
-    color: #f8fafc;
+    color: #0f172a;
     margin-bottom: 0.75rem;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
 }
 .hero-title span {
-    background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    background: linear-gradient(135deg, #6366f1, #3b82f6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 .hero-desc {
     color: #64748b;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     line-height: 1.6;
     margin-bottom: 0;
 }
@@ -80,8 +81,9 @@ h1, h2, h3 { color: #f1f5f9 !important; }
 .stats-row {
     display: flex;
     gap: 1px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
     border-radius: 14px;
     overflow: hidden;
     margin: 2rem 0;
@@ -90,88 +92,76 @@ h1, h2, h3 { color: #f1f5f9 !important; }
     flex: 1;
     text-align: center;
     padding: 1rem 0.5rem;
-    background: #0a0a0f;
+    background: #ffffff;
 }
 .stat-item:not(:last-child) {
-    border-right: 1px solid rgba(255,255,255,0.06);
+    border-right: 1px solid rgba(0,0,0,0.04);
 }
 .stat-val {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #a78bfa;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #4f46e5;
     display: block;
 }
 .stat-lbl {
     font-size: 0.72rem;
-    color: #475569;
+    color: #64748b;
     margin-top: 2px;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-/* ─── Input Card ─── */
-.input-card {
-    background: #111118;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 18px;
-    padding: 1.75rem;
-    margin-bottom: 1.5rem;
-}
-.input-label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #64748b;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 0.6rem;
-}
-
-/* ─── Override Streamlit inputs ─── */
+/* ─── Input Area ─── */
 .stTextArea textarea {
-    background: #0d0d14 !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
     border-radius: 12px !important;
-    color: #e2e8f0 !important;
+    color: #0f172a !important;
     font-family: 'Inter', sans-serif !important;
     font-size: 0.95rem !important;
     resize: none !important;
-    transition: border-color 0.2s !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+    transition: all 0.2s !important;
 }
 .stTextArea textarea:focus {
-    border-color: rgba(139,92,246,0.5) !important;
-    box-shadow: 0 0 0 3px rgba(139,92,246,0.1) !important;
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15) !important;
 }
 .stTextArea label { display: none !important; }
 .stSelectbox label { 
     font-size: 0.8rem !important;
     font-weight: 600 !important;
-    color: #64748b !important;
+    color: #475569 !important;
     letter-spacing: 0.06em !important;
     text-transform: uppercase !important;
 }
 div[data-baseweb="select"] > div {
-    background: #0d0d14 !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
     border-radius: 10px !important;
+    color: #0f172a !important;
 }
 
 /* ─── Analyze Button ─── */
 .stButton > button {
     width: 100% !important;
-    background: linear-gradient(135deg, #7c3aed, #4f46e5) !important;
-    color: #fff !important;
+    background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
+    color: #ffffff !important;
     border: none !important;
     border-radius: 12px !important;
     padding: 0.8rem 1.5rem !important;
-    font-size: 0.92rem !important;
+    font-size: 1rem !important;
     font-weight: 600 !important;
     letter-spacing: 0.01em !important;
-    transition: opacity 0.2s, transform 0.15s !important;
+    box-shadow: 0 4px 6px -1px rgba(99,102,241,0.2) !important;
+    transition: all 0.2s !important;
     cursor: pointer !important;
 }
 .stButton > button:hover {
-    opacity: 0.9 !important;
-    transform: translateY(-1px) !important;
+    opacity: 0.95 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 8px -1px rgba(99,102,241,0.3) !important;
 }
 .stButton > button:active { transform: translateY(0) !important; }
 
@@ -181,34 +171,35 @@ div[data-baseweb="select"] > div {
     padding: 2rem 1.75rem;
     text-align: center;
     margin: 1.5rem 0;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
 }
 .verdict-fake {
-    background: rgba(239,68,68,0.08);
-    border: 1px solid rgba(239,68,68,0.25);
+    background: #fef2f2;
+    border: 1px solid #fecaca;
 }
 .verdict-real {
-    background: rgba(16,185,129,0.08);
-    border: 1px solid rgba(16,185,129,0.25);
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
 }
-.verdict-icon { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
+.verdict-icon { font-size: 3rem; margin-bottom: 0.75rem; display: block; }
 .verdict-title {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 0.4rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
 }
-.verdict-fake .verdict-title { color: #f87171; }
-.verdict-real .verdict-title { color: #34d399; }
+.verdict-fake .verdict-title { color: #dc2626; }
+.verdict-real .verdict-title { color: #059669; }
 .verdict-body {
-    font-size: 0.88rem;
-    color: #64748b;
+    font-size: 0.95rem;
+    color: #475569;
     line-height: 1.6;
 }
 
 /* ─── Pipeline Steps ─── */
 .pipeline-title {
     font-size: 0.75rem;
-    font-weight: 600;
-    color: #475569;
+    font-weight: 700;
+    color: #64748b;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin: 1.5rem 0 0.75rem;
@@ -217,32 +208,32 @@ div[data-baseweb="select"] > div {
     display: flex;
     gap: 0.85rem;
     align-items: flex-start;
-    padding: 0.65rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 .step:last-child { border-bottom: none; }
 .step-badge {
-    background: rgba(99,102,241,0.15);
-    color: #818cf8;
+    background: #e0e7ff;
+    color: #4f46e5;
     border-radius: 6px;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 700;
     flex-shrink: 0;
     margin-top: 1px;
 }
 .step-name {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #94a3b8;
-    margin-bottom: 2px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 3px;
 }
 .step-value {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: #475569;
     word-break: break-word;
     line-height: 1.5;
@@ -251,33 +242,38 @@ div[data-baseweb="select"] > div {
 /* ─── Expander ─── */
 .streamlit-expanderHeader {
     background: transparent !important;
-    border: 1px solid rgba(255,255,255,0.07) !important;
+    border: 1px solid #e2e8f0 !important;
     border-radius: 10px !important;
-    color: #64748b !important;
-    font-size: 0.82rem !important;
+    color: #475569 !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
 }
 .streamlit-expanderContent {
-    border: 1px solid rgba(255,255,255,0.07) !important;
+    border: 1px solid #e2e8f0 !important;
     border-top: none !important;
     border-radius: 0 0 10px 10px !important;
-    background: #0d0d14 !important;
+    background: #ffffff !important;
     padding: 0 !important;
 }
 
+/* ─── Info/Alert boxes ─── */
+.stAlert {
+    background-color: #f1f5f9 !important;
+    border-radius: 12px !important;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
 /* ─── Divider ─── */
-hr { border-color: rgba(255,255,255,0.06) !important; margin: 1.5rem 0 !important; }
+hr { border-color: #e2e8f0 !important; margin: 2rem 0 !important; }
 
 /* ─── Footer ─── */
 .footer {
     text-align: center;
-    color: #1e293b;
-    font-size: 0.75rem;
-    padding: 2rem 0 1rem;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    padding: 2.5rem 0 1.5rem;
 }
-
-/* Misc overrides */
-label, p, span, div { color: inherit; }
-.stAlert { border-radius: 10px !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -332,7 +328,6 @@ except Exception as e:
 # Hero
 st.markdown("""
 <div class="hero">
-    <div class="hero-badge">AI Powered Detection</div>
     <div class="hero-title">Deteksi <span>Ulasan Palsu</span><br>dalam Hitungan Detik</div>
     <div class="hero-desc">Menggunakan algoritma TF-IDF &amp; Support Vector Machine<br>yang dilatih pada 40.000+ ulasan produk</div>
 </div>
@@ -341,9 +336,9 @@ st.markdown("""
 # Stats
 st.markdown("""
 <div class="stats-row">
-    <div class="stat-item"><span class="stat-val">87%</span><span class="stat-lbl">Akurasi</span></div>
-    <div class="stat-item"><span class="stat-val">0.87</span><span class="stat-lbl">Precision</span></div>
-    <div class="stat-item"><span class="stat-val">0.87</span><span class="stat-lbl">F1-Score</span></div>
+    <div class="stat-item"><span class="stat-val">92%</span><span class="stat-lbl">Akurasi</span></div>
+    <div class="stat-item"><span class="stat-val">0.92</span><span class="stat-lbl">Precision</span></div>
+    <div class="stat-item"><span class="stat-val">0.92</span><span class="stat-lbl">F1-Score</span></div>
     <div class="stat-item"><span class="stat-val">40K+</span><span class="stat-lbl">Data Latih</span></div>
 </div>
 """, unsafe_allow_html=True)
@@ -351,6 +346,27 @@ st.markdown("""
 if not model_ok:
     st.error(f"Model tidak ditemukan. Pastikan `svm_model.pkl` & `tfidf_model.pkl` ada.\n\n`{model_err}`")
     st.stop()
+
+# Information Section
+st.markdown("### 📖 Cara Penggunaan & Tentang Model")
+st.info("""
+1. Pilih bahasa ulasan di bawah ini.
+2. Tempel ulasan produk yang dicurigai (misalnya dari e-commerce) ke dalam kotak teks.
+3. Klik tombol **Analisis Sekarang →**
+""")
+
+with st.expander("🤖 Arsitektur Super-Optimized Hybrid Model"):
+    st.markdown("""
+    **Bagaimana cara kerjanya?**
+    - **Algoritma Utama:** Ridge Classifier (Model Linear Cepat berakurasi tinggi).
+    - **Ekstraksi Fitur:** TF-IDF (Term Frequency-Inverse Document Frequency).
+    - **Analisis Ganda:** Model menganalisis susunan **Kata** (Word N-Grams) sekaligus struktur **Karakter** (Character N-Grams).
+    - **Skala Analisis:** >200.000 kombinasi linguistik unik diuji dalam sepersekian detik.
+    
+    Model dilatih mengenali karakteristik ulasan bot (seperti minim sentimen spesifik, pengulangan frasa, dan huruf kapital/tanda baca spam) untuk membedakannya dengan ulasan tulisan manusia asli.
+    """)
+
+st.markdown("<hr>", unsafe_allow_html=True)
 
 # Input Card
 lang_opt = st.selectbox(

@@ -55,6 +55,26 @@ def preprocess(text, translate=True):
 
     return final, steps
 
+def get_explanation(text, tfidf_model, svm_model, top_n=5):
+    vec = tfidf_model.transform([text])
+    indices = vec.indices
+    values = vec.data
+    coef = svm_model.coef_
+    feature_names = tfidf_model.get_feature_names_out()
+    
+    contributions = []
+    for idx, val in zip(indices, values):
+        score = float(val * coef[idx])
+        name = feature_names[idx].split('__')[-1] if '__' in feature_names[idx] else feature_names[idx]
+        contributions.append((name, score))
+    
+    contributions.sort(key=lambda x: x[1])
+    
+    fake_reasons = [{"feature": n, "score": s} for n, s in contributions[:top_n] if s < 0]
+    real_reasons = [{"feature": n, "score": s} for n, s in sorted(contributions, key=lambda x: x[1], reverse=True)[:top_n] if s > 0]
+            
+    return {"fake": fake_reasons, "real": real_reasons}
+
 # ── Routes ────────────────────────────────────────────────────
 @app.route('/')
 def index():
@@ -74,7 +94,8 @@ def predict():
         vec    = tfidf_model.transform([final_text])
         label  = svm_model.predict(vec)[0]
         result = 'fake' if label == 'CG' else 'real'
-        return jsonify({'result': result, 'label': label, 'steps': steps})
+        explanation = get_explanation(final_text, tfidf_model, svm_model)
+        return jsonify({'result': result, 'label': label, 'steps': steps, 'explanation': explanation})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
