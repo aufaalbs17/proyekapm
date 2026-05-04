@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import joblib
+import os
 import re
 import nltk
 from nltk.corpus import stopwords
@@ -14,8 +15,11 @@ nltk.download('stopwords', quiet=True)
 app = Flask(__name__)
 
 # Load model
-tfidf_model = joblib.load('tfidf_model.pkl')
-svm_model   = joblib.load('svm_model.pkl')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, '../models')
+
+tfidf_model = joblib.load(os.path.join(MODEL_DIR, 'tfidf_model.pkl'))
+svm_model   = joblib.load(os.path.join(MODEL_DIR, 'svm_model.pkl'))
 
 stemmer    = PorterStemmer()
 stop_words = set(stopwords.words('english'))
@@ -64,6 +68,8 @@ def get_explanation(text, tfidf_model, svm_model, top_n=5):
     
     contributions = []
     for idx, val in zip(indices, values):
+        if 'char__' in feature_names[idx]:
+            continue
         score = float(val * coef[idx])
         name = feature_names[idx].split('__')[-1] if '__' in feature_names[idx] else feature_names[idx]
         contributions.append((name, score))

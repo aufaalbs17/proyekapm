@@ -12,7 +12,10 @@ def run_svm_training():
     
     # 1. Memuat dataset bersih
     print("\n[1] Memuat dataset 'fake_reviews_preprocessed.csv'...")
-    df = pd.read_csv('fake_reviews_preprocessed.csv')
+    import os
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    ROOT_DIR = os.path.join(BASE_DIR, '..')
+    df = pd.read_csv(os.path.join(ROOT_DIR, 'fake_reviews_preprocessed.csv'))
     df = df.dropna(subset=['text_clean'])
     
     # X adalah data teks, y adalah label (OR = Original, CG = Computer Generated/Fake)
@@ -70,8 +73,11 @@ def run_svm_training():
     print(f"Benar menebak Asli (OR)     : {cm[1][1]}\n")
     
     # 6. Menyimpan Model untuk di-deploy ke Web
-    joblib.dump(tfidf_vectorizer, 'tfidf_model.pkl')
-    joblib.dump(svm_model, 'svm_model.pkl')
+    MODEL_DIR = os.path.join(ROOT_DIR, 'models')
+    if not os.path.exists(MODEL_DIR):
+        os.makedirs(MODEL_DIR)
+    joblib.dump(tfidf_vectorizer, os.path.join(MODEL_DIR, 'tfidf_model.pkl'))
+    joblib.dump(svm_model, os.path.join(MODEL_DIR, 'svm_model.pkl'))
     print("[6] Model SVM dan TF-IDF Vectorizer telah berhasil disimpan (.pkl).")
 
 if __name__ == "__main__":

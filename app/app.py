@@ -1,5 +1,6 @@
 import streamlit as st
 import joblib
+import os
 import re
 import nltk
 from nltk.corpus import stopwords
@@ -312,7 +313,9 @@ def run_pipeline(text, translate=True):
 
 @st.cache_resource(show_spinner=False)
 def load_models():
-    return joblib.load('tfidf_model.pkl'), joblib.load('svm_model.pkl')
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    model_dir = os.path.join(base_dir, '../models')
+    return joblib.load(os.path.join(model_dir, 'tfidf_model.pkl')), joblib.load(os.path.join(model_dir, 'svm_model.pkl'))
 
 # ── Load ──────────────────────────────────────────────────────
 try:
