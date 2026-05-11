@@ -3,14 +3,17 @@ from text_preprocessing import preprocess_text
 
 def run_progress_report_2():
     print("="*50)
-    print("PROGRESS REPORT 2: TEXT PREPROCESSING (NLTK)")
+    print("PROGRESS REPORT 2: TEXT PREPROCESSING (NLTK & SASTRAWI)")
     print("="*50)
     
-    # 1. Dataset Fake Reviews (Bahasa Inggris)
-    print("\n[1] Memproses Dataset: Fake Reviews (Bahasa Inggris)")
+    # 1. Dataset Fake Reviews (Bahasa Indonesia)
+    print("\n[1] Memproses Dataset: Tokopedia (Bahasa Indonesia)")
     try:
-        df_fake = pd.read_csv('fake reviews dataset.csv')
-        sample_fake = df_fake['text_'].dropna().head(3)
+        import os
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        ROOT_DIR = os.path.join(BASE_DIR, '..')
+        df_fake = pd.read_csv(os.path.join(ROOT_DIR, 'data', 'processed', 'tokopedia_labeled.csv'))
+        sample_fake = df_fake['review_text'].dropna().head(3)
         
         for i, text in enumerate(sample_fake, 1):
             print(f"\n--- Data ke-{i} ---")
@@ -28,10 +31,10 @@ def run_progress_report_2():
             tokens = tokenize_text(folded)
             print(f"3. Tokenize   : {tokens}")
             
-            no_stop = remove_stopwords(tokens, 'english')
+            no_stop = remove_stopwords(tokens, 'indonesian')
             print(f"4. Stopwords  : {no_stop}")
             
-            stemmed = stem_text(no_stop, 'english')
+            stemmed = stem_text(no_stop, 'indonesian')
             print(f"5. Stemming   : {stemmed}")
             
             final_text = " ".join(stemmed)

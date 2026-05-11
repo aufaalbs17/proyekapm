@@ -11,15 +11,15 @@ def run_svm_training():
     print("="*60)
     
     # 1. Memuat dataset bersih
-    print("\n[1] Memuat dataset 'fake_reviews_preprocessed.csv'...")
+    print("\n[1] Memuat dataset 'tokopedia_preprocessed.csv'...")
     import os
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     ROOT_DIR = os.path.join(BASE_DIR, '..')
-    df = pd.read_csv(os.path.join(ROOT_DIR, 'fake_reviews_preprocessed.csv'))
-    df = df.dropna(subset=['text_clean'])
+    df = pd.read_csv(os.path.join(ROOT_DIR, 'data', 'processed', 'tokopedia_preprocessed.csv'))
+    df = df.dropna(subset=['review_text_clean'])
     
-    # X adalah data teks, y adalah label (OR = Original, CG = Computer Generated/Fake)
-    X = df['text_clean']
+    # X adalah data teks, y adalah label (0 = Asli, 1 = Palsu)
+    X = df['review_text_clean']
     y = df['label']
     
     # 2. Split Data (Pembagian Data Latih dan Data Uji)
@@ -63,14 +63,14 @@ def run_svm_training():
     print(f"AKURASI MODEL (Accuracy) : {acc * 100:.2f}%\n")
     
     print("--- Laporan Klasifikasi Rinci (Precision, Recall, F1-Score) ---")
-    print(classification_report(y_test, y_pred, target_names=['Fake (CG)', 'Original (OR)']))
+    print(classification_report(y_test, y_pred, target_names=['Asli (0)', 'Palsu (1)']))
     
     print("--- Confusion Matrix (Matriks Kebingungan) ---")
     cm = confusion_matrix(y_test, y_pred)
-    print(f"Benar menebak Fake (CG)     : {cm[0][0]}")
-    print(f"Salah tebak Asli padahal Fake: {cm[0][1]}")
-    print(f"Salah tebak Fake padahal Asli: {cm[1][0]}")
-    print(f"Benar menebak Asli (OR)     : {cm[1][1]}\n")
+    print(f"Benar menebak Asli (0)      : {cm[0][0]}")
+    print(f"Salah tebak Palsu pdhl Asli : {cm[0][1]}")
+    print(f"Salah tebak Asli pdhl Palsu : {cm[1][0]}")
+    print(f"Benar menebak Palsu (1)     : {cm[1][1]}\n")
     
     # 6. Menyimpan Model untuk di-deploy ke Web
     MODEL_DIR = os.path.join(ROOT_DIR, 'models')
