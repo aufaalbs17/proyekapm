@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FakeGuard | Penjelasan Sistem</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+      :root {
+        --bg: #f7f6f3;
+        --bg-2: #f1f3f8;
+        --surface: #ffffff;
+        --surface-hover: #f7f7fb;
+        --border: rgba(15, 23, 42, 0.08);
+        --text: #0f172a;
+        --text-muted: #64748b;
+        --primary: #0f766e;
+        --primary-2: #14b8a6;
+        --primary-glow: rgba(20, 184, 166, 0.18);
+        --success: #16a34a;
+        --shadow-soft: 0 10px 30px -20px rgba(15, 23, 42, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Manrope", sans-serif;
+        background:
+          radial-gradient(900px 500px at 10% -10%, #d9f7f3 0%, transparent 60%),
+          radial-gradient(
+            900px 500px at 110% -20%,
+            #e7efff 0%,
+            transparent 60%
+          ),
+          linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+        line-height: 1.65;
+      }
+
+      .bg-glow {
+        position: absolute;
+        top: -20%;
+        right: -10%;
+        width: 60vw;
+        height: 60vw;
+        background: radial-gradient(
+          circle,
+          var(--primary-glow) 0%,
+          transparent 60%
+        );
+        filter: blur(80px);
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      .bg-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+        background-size: 28px 28px;
+        mask-image: radial-gradient(
+          circle at 30% 10%,
+          rgba(0, 0, 0, 0.7),
+          transparent 65%
+        );
+        z-index: -2;
+        pointer-events: none;
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 5%;
+        border-bottom: 1px solid var(--border);
+        background: rgba(247, 246, 243, 0.8);
+        backdrop-filter: blur(12px);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .logo {
+        font-family: "Fraunces", serif;
+        font-size: 1.35rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .logo i {
+        color: var(--primary);
+        font-size: 1.5rem;
+      }
+
+      .nav-badge {
+        font-size: 0.75rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 0.4rem 1rem;
+        border-radius: 99px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .nav-badge span {
+        width: 8px;
+        height: 8px;
+        background: var(--success);
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 8px var(--success);
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 4rem;
+        padding: 4rem 5%;
+        max-width: 1400px;
+        margin: 0 auto;
+        align-items: start;
+      }
+
+      .hero h1 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(2.6rem, 4vw, 4.2rem);
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
+      }
+
+      .text-gradient {
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero p {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        margin-bottom: 1.5rem;
+        max-width: 90%;
+      }
+
+      .cta-row {
+        display: flex;
+        gap: 1rem;
+        margin: 2rem 0 1rem;
+        flex-wrap: wrap;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        color: #ffffff;
+        border: none;
+        padding: 0.95rem 1.6rem;
+        border-radius: 12px;
+        font-family: "Fraunces", serif;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        text-decoration: none;
+        box-shadow: 0 8px 20px rgba(20, 184, 166, 0.28);
+        transition: all 0.2s;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background: var(--surface);
+        color: var(--text);
+        border: 1px solid var(--border);
+        padding: 0.9rem 1.4rem;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .panel {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.45);
+      }
+
+      .panel-hidden {
+        display: none;
+      }
+
+      .panel h3 {
+        font-family: "Fraunces", serif;
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+      }
+
+      .hero-media {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 0.75rem;
+        box-shadow: var(--shadow-soft);
+        margin-bottom: 1.75rem;
+      }
+
+      .hero-media img {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+        border-radius: 16px;
+        display: block;
+      }
+
+      .photo-credit {
+        margin-top: 0.5rem;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+
+      .panel p {
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .feature-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.2rem;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .feature-title {
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+      }
+
+      .feature-desc {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      .step-list {
+        margin-top: 1.5rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .step-item {
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        gap: 0.9rem;
+        align-items: start;
+        padding: 0.9rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .step-item:last-child {
+        border-bottom: none;
+      }
+
+      .step-badge {
+        background: rgba(20, 184, 166, 0.12);
+        color: var(--primary);
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+
+      .step-title {
+        font-weight: 700;
+        margin-bottom: 0.2rem;
+      }
+
+      .step-desc {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+      }
+
+      @media (max-width: 968px) {
+        main {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-glow"></div>
+    <div class="bg-grid"></div>
+
+    <nav>
+      <div class="logo"><i class="ph-fill ph-shield-check"></i> FakeGuard</div>
+      <div class="nav-badge"><span></span> Sistem Aktif</div>
+    </nav>
+
+    <main>
+      <section class="hero">
+        <h1>
+          Sistem <span class="text-gradient">Deteksi Ulasan Palsu</span>
+          untuk E-commerce
+        </h1>
+        <p>
+          FakeGuard membantu memverifikasi keaslian ulasan dengan pendekatan NLP
+          dan Machine Learning. Sistem memproses teks, mengekstraksi fitur
+          TF-IDF word dan character n-grams, lalu memprediksi ulasan asli atau
+          palsu.
+        </p>
+        <p>
+          Fokus utama sistem ini adalah mendeteksi pola bahasa tidak natural,
+          repetisi, dan karakteristik ulasan otomatis (computer generated).
+        </p>
+
+        <div class="cta-row">
+          <a class="btn-primary" href="/app">
+            Mulai Deteksi
+            <i class="ph-bold ph-arrow-right"></i>
+          </a>
+          <button class="btn-secondary" type="button" id="toggle-alur">
+            Lihat Alur Sistem
+          </button>
+        </div>
+      </section>
+
+      <section class="panel panel-hidden" id="alur">
+        <h3>Ringkasan Sistem</h3>
+        <div class="hero-media">
+          <img
+            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=900&q=80"
+            alt="Ilustrasi proses review dan analisis teks"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="photo-credit">Photo from Unsplash</div>
+        </div>
+
+        <p>
+          Sistem ini dibangun dari pipeline preprocessing, vectorization, dan
+          klasifikasi linier. Setiap input ulasan akan melalui langkah yang
+          konsisten agar prediksi stabil dan dapat dijelaskan.
+        </p>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-title">Hybrid Feature Union</div>
+            <div class="feature-desc">
+              Menggabungkan word n-grams dan character n-grams untuk menangkap
+              konteks dan pola spam.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-title">Auto Translation</div>
+            <div class="feature-desc">
+              Teks Indonesia dapat diterjemahkan otomatis ke Inggris untuk
+              konsistensi model.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-title">Explainable Output</div>
+            <div class="feature-desc">
+              Sistem menampilkan faktor fitur dominan sebagai alasan prediksi.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-title">Fast Inference</div>
+            <div class="feature-desc">
+              Waktu prediksi singkat dengan model linear yang efisien.
+            </div>
+          </div>
+        </div>
+
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-badge">1</div>
+            <div>
+              <div class="step-title">Input Ulasan</div>
+              <div class="step-desc">
+                Pengguna memasukkan teks ulasan dan memilih bahasa input.
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-badge">2</div>
+            <div>
+              <div class="step-title">Preprocessing NLP</div>
+              <div class="step-desc">
+                Teks dibersihkan, di-tokenisasi, dan distemming untuk
+                konsistensi.
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-badge">3</div>
+            <div>
+              <div class="step-title">Vectorization</div>
+              <div class="step-desc">
+                Teks diubah ke TF-IDF word dan character n-grams.
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-badge">4</div>
+            <div>
+              <div class="step-title">Prediksi</div>
+              <div class="step-desc">
+                Model ridge classifier memberi hasil asli atau palsu.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const toggleButton = document.getElementById("toggle-alur");
+      const alurSection = document.getElementById("alur");
+
+      toggleButton.addEventListener("click", () => {
+        const isHidden = alurSection.classList.contains("panel-hidden");
+        if (isHidden) {
+          alurSection.classList.remove("panel-hidden");
+          alurSection.scrollIntoView({ behavior: "smooth", block: "start" });
+          toggleButton.textContent = "Sembunyikan Alur Sistem";
+        } else {
+          alurSection.classList.add("panel-hidden");
+          toggleButton.textContent = "Lihat Alur Sistem";
+        }
+      });
+    </script>
+  </body>
+</html>

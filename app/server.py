@@ -83,6 +83,10 @@ def get_explanation(text, tfidf_model, svm_model, top_n=5):
 
 # ── Routes ────────────────────────────────────────────────────
 @app.route('/')
+def landing():
+    return render_template('landing.html')
+
+@app.route('/app')
 def index():
     return render_template('index.html')
 
@@ -99,11 +103,12 @@ def predict():
         final_text, steps = preprocess(text, translate=translate)
         vec    = tfidf_model.transform([final_text])
         label  = svm_model.predict(vec)[0]
-        result = 'fake' if label == 'CG' else 'real'
+        label_str = str(label)
+        result = 'fake' if label_str == 'CG' else 'real'
         explanation = get_explanation(final_text, tfidf_model, svm_model)
-        return jsonify({'result': result, 'label': label, 'steps': steps, 'explanation': explanation})
+        return jsonify({'result': result, 'label': label_str, 'steps': steps, 'explanation': explanation})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=False, port=5000)
