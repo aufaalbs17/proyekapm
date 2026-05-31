@@ -108,11 +108,11 @@ def predict():
     if not text:
         return jsonify({'error': 'Teks tidak boleh kosong'}), 400
 
-    # Heuristic Filter untuk teks asal-asalan
+    # Heuristic Filter untuk teks asal-asalan / ketikan acak ekstrim
     words = text.split()
-    if len(words) < 3 or any(len(w) > 20 for w in words):
-        steps = [{"step": "Heuristic Filter", "value": "Teks diblokir karena terlalu pendek atau terindikasi ketikan acak."}]
-        explanation = {"fake": [{"feature": "Spam/Bot Heuristic", "score": 99.9}], "real": []}
+    if len(text) < 2 or any(len(w) > 25 for w in words):
+        steps = [{"step": "Heuristic Filter", "value": "Teks diblokir karena terlalu pendek (kurang dari 2 karakter) atau terindikasi ketikan acak."}]
+        explanation = {"fake": [{"feature": "Keyboard Smash / Spam", "score": 99.9}], "real": []}
         return jsonify({'result': 'fake', 'label': '1', 'confidence': 99.9, 'steps': steps, 'explanation': explanation})
 
     try:
