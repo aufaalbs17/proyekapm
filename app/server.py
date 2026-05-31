@@ -100,6 +100,14 @@ def landing():
 def index():
     return render_template('index.html')
 
+@app.route('/alur')
+def alur():
+    return render_template('alur.html')
+
+@app.route('/tim')
+def tim():
+    return render_template('tim.html')
+
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()

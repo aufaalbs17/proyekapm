@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FakeGuard | Tim Proyek</title>
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+      :root {
+        --bg: #f5f5f7;
+        --bg-2: #fbfbfd;
+        --surface: #ffffff;
+        --surface-hover: #f5f5f7;
+        --border: rgba(29, 29, 31, 0.12);
+        --text: #1d1d1f;
+        --text-muted: #6e6e73;
+        --primary: #0071e3;
+        --primary-2: #0a84ff;
+        --primary-glow: rgba(10, 132, 255, 0.22);
+        --success: #34c759;
+        --shadow-soft: 0 18px 50px -35px rgba(0, 0, 0, 0.55);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+          "Segoe UI", Roboto, Helvetica, Arial, system-ui, sans-serif;
+        background:
+          radial-gradient(
+            900px 500px at 12% -10%,
+            rgba(10, 132, 255, 0.14) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            900px 500px at 110% -20%,
+            rgba(52, 199, 89, 0.1) 0%,
+            transparent 60%
+          ),
+          linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+
+      .bg-glow {
+        position: absolute;
+        top: -20%;
+        right: -10%;
+        width: 60vw;
+        height: 60vw;
+        background: radial-gradient(
+          circle,
+          var(--primary-glow) 0%,
+          transparent 60%
+        );
+        filter: blur(80px);
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      .bg-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(29, 29, 31, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(29, 29, 31, 0.035) 1px, transparent 1px);
+        background-size: 28px 28px;
+        mask-image: radial-gradient(
+          circle at 30% 10%,
+          rgba(0, 0, 0, 0.7),
+          transparent 65%
+        );
+        z-index: -2;
+        pointer-events: none;
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 5%;
+        border-bottom: 1px solid var(--border);
+        background: rgba(247, 246, 243, 0.8);
+        backdrop-filter: blur(12px);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .logo {
+        font-size: 1.15rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: var(--text);
+      }
+
+      .logo i {
+        color: var(--primary);
+        font-size: 1.5rem;
+      }
+
+      .nav-actions {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .nav-pill {
+        font-size: 0.9rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 0.55rem 0.95rem;
+        border-radius: 999px;
+        color: var(--text);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .nav-pill:hover {
+        background: var(--surface-hover);
+      }
+
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 3.25rem 5% 4.5rem;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 3.6vw, 3.2rem);
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+      }
+
+      .text-gradient {
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .subtitle {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        max-width: 78ch;
+        margin-top: 0.75rem;
+      }
+
+      .panel {
+        margin-top: 1.75rem;
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid rgba(29, 29, 31, 0.1);
+        border-radius: 24px;
+        padding: 2rem;
+        box-shadow: 0 26px 70px -40px rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(14px);
+      }
+
+      .team-grid {
+        margin-top: 1.25rem;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 1.2rem 1.25rem;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .name {
+        font-weight: 900;
+        letter-spacing: -0.01em;
+        font-size: 1.05rem;
+      }
+
+      .nim {
+        margin-top: 0.2rem;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      .note {
+        margin-top: 0.75rem;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 860px) {
+        .team-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-glow"></div>
+    <div class="bg-grid"></div>
+
+    <nav>
+      <a class="logo" href="/">
+        <i class="ph-fill ph-shield-check"></i>
+        FakeGuard
+      </a>
+      <div class="nav-actions">
+        <a class="nav-pill" href="/alur"
+          ><i class="ph-bold ph-git-branch"></i> Alur Sistem</a
+        >
+        <a class="nav-pill" href="/app"
+          ><i class="ph-bold ph-magnifying-glass"></i> Mulai Deteksi</a
+        >
+      </div>
+    </nav>
+
+    <main>
+      <h1>Tim <span class="text-gradient">Proyek</span></h1>
+      <p class="subtitle">
+        Berikut daftar anggota tim yang mengembangkan FakeGuard.
+      </p>
+
+      <section class="panel">
+        <div class="team-grid">
+          <div class="card">
+            <div class="name">Siti Aliani Husnah. F</div>
+            <div class="nim">NIM 2311522006</div>
+          </div>
+          <div class="card">
+            <div class="name">Ahmad Rasya Radya Aufa Lubis</div>
+            <div class="nim">NIM 2311522008</div>
+          </div>
+          <div class="card">
+            <div class="name">Ahmad Iqbal Ramadhan</div>
+            <div class="nim">NIM 2311523018</div>
+          </div>
+          <div class="card">
+            <div class="name">Farhan Arva Amanta</div>
+            <div class="nim">NIM 2311523038</div>
+          </div>
+        </div>
+
+        <div class="note">Terima kasih sudah mencoba FakeGuard.</div>
+      </section>
+    </main>
+  </body>
+</html>
