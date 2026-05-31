@@ -561,19 +561,19 @@
         </p>
 
         <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-value">92%</div>
+          <div class="stat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
+            <div class="stat-value">93.7%</div>
             <div class="stat-label">Tingkat Akurasi</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
             <div class="stat-value">206k+</div>
             <div class="stat-label">Dimensi Fitur (N-Grams)</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
             <div class="stat-value">40.000</div>
             <div class="stat-label">Dataset Latih</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
             <div class="stat-value">~0.3s</div>
             <div class="stat-label">Kecepatan Inference</div>
           </div>
@@ -589,21 +589,13 @@
             N-Grams)
           </li>
           <li>
-            <i class="ph ph-check-circle"></i> Auto-translasi dengan dukungan
-            Bahasa Indonesia
+            <i class="ph ph-check-circle"></i> Optimasi untuk Bahasa Indonesia
           </li>
         </ul>
       </div>
 
       <!-- Right Column (App Card) -->
       <div class="app-card">
-        <div class="form-group">
-          <label for="lang-select">Bahasa Input</label>
-          <select id="lang-select">
-            <option value="id">Indonesia (Auto-Translate ke EN)</option>
-            <option value="en">English (Direct Analysis)</option>
-          </select>
-        </div>
 
         <div class="form-group">
           <label for="review-input">Teks Ulasan Produk</label>
@@ -611,6 +603,10 @@
             id="review-input"
             placeholder="Salin dan tempel ulasan mencurigakan dari E-Commerce di sini...&#10;&#10;Contoh bot: 'Produk ini sangat bagus saya sangat menyukainya pengiriman cepat penjual ramah mantap mantap mantap'"
           ></textarea>
+          
+          <button class="btn-random" onclick="fillRandomReview()" style="margin-top: 0.75rem; font-size: 0.8rem; background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; color: var(--text-muted); cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'Manrope', sans-serif; font-weight: 600;">
+            <i class="ph-bold ph-dice-three"></i> Beri Contoh Ulasan Acak
+          </button>
         </div>
 
         <button class="btn-submit" id="analyze-btn" onclick="analyze()">
@@ -624,6 +620,15 @@
           <div class="verdict-card" id="verdict-card">
             <i class="ph-fill" id="verdict-icon"></i>
             <h3 class="verdict-title" id="verdict-title"></h3>
+            <div style="margin: 1.5rem 0 1rem 0;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text);">
+                <span style="font-family: 'Manrope', sans-serif;"><i class="ph-bold ph-target"></i> Tingkat Kepastian (Confidence)</span>
+                <span id="confidence-value"></span>
+              </div>
+              <div style="height: 10px; background: rgba(0,0,0,0.05); border-radius: 5px; overflow: hidden; border: 1px solid rgba(0,0,0,0.05);">
+                <div id="confidence-bar" style="height: 100%; width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);"></div>
+              </div>
+            </div>
             <p class="verdict-desc" id="verdict-desc"></p>
           </div>
 
@@ -658,7 +663,6 @@
     <script>
       async function analyze() {
         const text = document.getElementById("review-input").value.trim();
-        const lang = document.getElementById("lang-select").value;
         const btn = document.getElementById("analyze-btn");
         const btnTxt = document.getElementById("btn-text");
         const btnIcon = document.getElementById("btn-icon");
@@ -672,17 +676,24 @@
 
         // UI Loading State
         btn.disabled = true;
-        btnTxt.textContent = "Sedang Memproses...";
         btnIcon.style.display = "none";
         spinner.style.display = "block";
         resultContainer.style.display = "none";
         document.getElementById("reasoning-wrapper").style.display = "none";
 
+        const loadingTexts = ["Mengekstrak fitur NLP...", "Membandingkan pola data...", "Menghitung probabilitas...", "Menarik kesimpulan..."];
+        let textIndex = 0;
+        btnTxt.textContent = loadingTexts[0];
+        const loadingInterval = setInterval(() => {
+            textIndex = (textIndex + 1) % loadingTexts.length;
+            btnTxt.textContent = loadingTexts[textIndex];
+        }, 500);
+
         try {
           const response = await fetch("/predict", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text, translate: lang === "id" }),
+            body: JSON.stringify({ text }),
           });
 
           const data = await response.json();
@@ -692,7 +703,7 @@
             return;
           }
 
-          renderResult(data.result);
+          renderResult(data.result, data.confidence);
           if (data.explanation) {
             renderReasoning(data.explanation, data.result);
           }
@@ -701,6 +712,7 @@
         } catch (err) {
           alert("Gagal terhubung ke server. Pastikan Flask backend berjalan.");
         } finally {
+          clearInterval(loadingInterval);
           btn.disabled = false;
           btnTxt.textContent = "Mulai Analisis";
           btnIcon.style.display = "block";
@@ -708,24 +720,49 @@
         }
       }
 
-      function renderResult(result) {
+      function fillRandomReview() {
+        const samples = [
+          "Barang nya bagus banget sesuai dengan gambar, pengiriman juga cepat. Recomended seller deh pokoknya mantap!",
+          "Kecewa banget, barang yang dateng beda sama yang di foto. Pengiriman juga lama sampai 2 minggu. Nyesel beli disini.",
+          "asdfghjklqwertyuiopzxcvbnm",
+          "Produk ini sangat bagus saya sangat menyukainya pengiriman cepat penjual ramah mantap mantap mantap mantap",
+          "ok"
+        ];
+        const randomIndex = Math.floor(Math.random() * samples.length);
+        document.getElementById("review-input").value = samples[randomIndex];
+        // Tambahkan efek kilat kecil pada tombol
+        const btn = document.querySelector('.btn-random');
+        btn.style.backgroundColor = 'var(--surface-hover)';
+        setTimeout(() => btn.style.backgroundColor = 'transparent', 200);
+      }
+
+      function renderResult(result, confidence) {
         const card = document.getElementById("verdict-card");
         const icon = document.getElementById("verdict-icon");
         const title = document.getElementById("verdict-title");
         const desc = document.getElementById("verdict-desc");
+        const confValue = document.getElementById("confidence-value");
+        const confBar = document.getElementById("confidence-bar");
 
         card.className = "verdict-card " + result;
+        
+        // Setup Confidence Animation
+        confBar.style.width = "0%";
+        confValue.textContent = confidence + "%";
+        setTimeout(() => { confBar.style.width = confidence + "%"; }, 100);
 
         if (result === "fake") {
           icon.className = "ph-fill ph-warning-circle verdict-icon";
           title.textContent = "Ulasan Palsu Terdeteksi";
           desc.textContent =
             "Model mengidentifikasi struktur linguistik yang anomali. Ulasan ini kemungkinan besar digenerasi oleh komputer (CG) atau bot farming.";
+          confBar.style.background = "var(--danger)";
         } else {
           icon.className = "ph-fill ph-check-circle verdict-icon";
           title.textContent = "Ulasan Asli (Autentik)";
           desc.textContent =
             "Model mengidentifikasi sentimen natural dan struktur frasa yang wajar. Ulasan ini kemungkinan ditulis oleh manusia sesungguhnya (OR).";
+          confBar.style.background = "var(--primary)";
         }
       }
 
@@ -784,5 +821,6 @@
           }
         });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
   </body>
 </html>
